@@ -1,36 +1,171 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Digibiz - Watson AI Consultant for SMEs
 
-## Getting Started
+**IBM Dev Day AI Demystified Hackathon - Proof of Concept**
 
-First, run the development server:
+Digibiz is an AI-powered consulting platform that digitizes Lean principles into a guided, gamified experience for small and medium enterprises (SMEs). This project demonstrates agentic AI capabilities using IBM watsonx Orchestrate.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Project Overview
+
+Digibiz (Watson AI Consultant) enables SMEs to systematically improve their business operations through a gamified Lean consulting platform. The solution applies Lean principles (Organize → Improve → Grow) as structured progression levels, where businesses advance by demonstrating real operational improvement through evidence-based validation.
+
+**Note:** This is a proof-of-concept demonstration built for the IBM Dev Day AI Demystified Hackathon. It is not intended for production use.
+
+## MVP Scope
+
+The current MVP implementation includes:
+
+- **Next.js Frontend**: Single page with embedded watsonx Orchestrate chat + visual progress dashboard
+- **API Routes**: Minimal Next.js API routes (2 endpoints) for agent orchestration and state persistence
+- **Agentic AI Flow**: 4 collaborative agents built in watsonx Orchestrate (no-code):
+  - **Assessment Agent**: Analyzes business description to detect Lean wastes (Muda)
+  - **Lean Coach Agent**: Decides next mission based on current level and business state
+  - **Execution Agent**: Generates actionable steps and downloadable templates
+  - **Validation Agent**: Evaluates uploaded evidence against mission checklist
+- **Database**: IBM Cloudant for storing business state and evidence metadata
+
+## Architecture
+
+The MVP follows a simplified, purpose-driven architecture:
+
+```
+Next.js Frontend (App Router)
+    ↓
+Next.js API Routes (2 endpoints)
+    ↓
+watsonx Orchestrate (4 agents)
+    ↓
+IBM Cloudant (state persistence)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Frontend**: Next.js App Router with embedded watsonx Orchestrate chat interface
+- **API Routes**: Lightweight layer for precise agent control and context passing
+- **Watson Services**: watsonx Orchestrate for agentic AI orchestration
+- **Storage**: IBM Cloudant for business state and evidence metadata
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Frontend**: Next.js 16 (App Router) with TypeScript
+- **Backend**: Next.js API Routes (minimal, 2 endpoints)
+- **AI Services**:
+  - IBM watsonx Orchestrate (4 collaborative agents)
+  - Granite 3.0 8B model (optimal cost/accuracy balance)
+- **Database**: IBM Cloudant
+- **Deployment**: Vercel (1-click deploy)
 
-## Learn More
+## Repository Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+Digibiz/
+├── agents/                    # YAML exports of 4 agents (from watsonx Orchestrate UI)
+│   ├── assessment-agent.yaml
+│   ├── lean-coach-agent.yaml
+│   ├── execution-agent.yaml
+│   └── validation-agent.yaml
+│
+├── app/
+│   ├── api/                   # Next.js API Routes
+│   │   ├── start-mission/
+│   │   │   └── route.ts      # Calls watsonx Orchestrate with context
+│   │   └── validate/
+│   │       └── route.ts      # Receives evidence → triggers Validation Agent
+│   │
+│   ├── page.tsx               # Frontend: embedded chat + visual progress dashboard
+│   ├── layout.tsx
+│   └── globals.css
+│
+├── public/
+│   ├── templates/             # Editable PDFs for missions
+│   └── uploads/                # User-uploaded evidence files
+│
+├── lean-missions.md           # 5 OMC missions with specific success criteria
+├── HACKATHON_GUIDE.md         # Replication steps in <15 min
+├── package.json
+└── README.md                  # This file
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## How to Run
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Prerequisites
 
-## Deploy on Vercel
+- Node.js (v18 or higher)
+- npm or yarn
+- IBM Cloud account with:
+  - watsonx Orchestrate access
+  - Cloudant instance
+  - Service credentials configured
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Setup
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Install dependencies:**
+```bash
+npm install
+```
+
+2. **Configure environment variables:**
+Create a `.env.local` file in the root directory:
+```env
+# IBM Cloudant
+CLOUDANT_URL=your_cloudant_url
+CLOUDANT_API_KEY=your_api_key
+CLOUDANT_DB_NAME=lean-agent-db
+
+# watsonx Orchestrate
+WATSONX_API_KEY=your_watsonx_api_key
+WATSONX_ENDPOINT=https://us-south.ml.cloud.ibm.com
+```
+
+3. **Run development server:**
+```bash
+npm run dev
+```
+
+The application will be available at `http://localhost:3000`
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+### Deploy to Vercel
+
+The easiest way to deploy is using Vercel:
+
+```bash
+# Install Vercel CLI (if not already installed)
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+Or use the [Vercel Platform](https://vercel.com/new) for one-click deployment.
+
+## Agentic AI Flow
+
+The platform demonstrates autonomous agent collaboration:
+
+1. **User Input**: "I want to improve my grocery store"
+2. **Assessment Agent**: Identifies "2-hour daily waiting during restocking" (waste detection)
+3. **Lean Coach Agent**: Selects "Mission 2: Map Your Core Process" based on current level
+4. **Execution Agent**: Delivers editable BPMN diagram template
+5. **User Upload**: Photo of process map
+6. **Validation Agent**: Approves evidence → Unlocks "Mission 3: Eliminate 1 Waste"
+7. **Dashboard**: Visually updates progress (zero human intervention)
+
+## Key Features
+
+- **Gamified Lean Progression**: Organize → Improve → Grow levels with evidence-based validation
+- **Agentic Orchestration**: 4 collaborative agents making autonomous decisions
+- **Real-time Progress Dashboard**: Visual feedback on business maturity and mission completion
+- **Evidence-based Validation**: Upload documents/images for AI-powered validation
+- **No-code Agent Creation**: Agents built entirely in watsonx Orchestrate UI
+
+## Disclaimer
+
+This project is a **proof of concept** developed for demonstration purposes during the IBM Dev Day AI Demystified Hackathon. It is not intended for production use and may contain limitations, incomplete features, or security considerations that would need to be addressed before any real-world deployment.
+
+---
+
+**Built for IBM Dev Day AI Demystified Hackathon**
