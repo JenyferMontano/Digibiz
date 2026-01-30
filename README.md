@@ -102,16 +102,8 @@ npm install
 ```
 
 2. **Configure environment variables:**
-Create a `.env.local` file in the root directory:
-```env
-# IBM Cloudant
-CLOUDANT_URL=your_cloudant_url
-CLOUDANT_API_KEY=your_api_key
-CLOUDANT_DB_NAME=lean-agent-db
+Create a `.env` file in the root directory
 
-# watsonx Orchestrate
-WATSONX_API_KEY=your_watsonx_api_key
-WATSONX_ENDPOINT=https://us-south.ml.cloud.ibm.com
 ```
 
 3. **Run development server:**
@@ -124,7 +116,7 @@ The application will be available at `http://localhost:3000`
 ### Build for Production
 
 ```bash
-npm run build
+npm run dev
 npm start
 ```
 
