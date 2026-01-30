@@ -1,105 +1,36 @@
-# Digibiz - Watson Business Copilot
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**IBM Dev Day AI Demystified Hackathon - Proof of Concept**
+## Getting Started
 
-Digibiz is an AI-powered business copilot designed to help small and medium enterprises (SMEs) automate repetitive business workflows through a conversational AI interface. This project demonstrates agentic AI capabilities using IBM Watson services.
-
-## Project Overview
-
-Digibiz (Watson Business Copilot) enables SMEs to streamline their business operations by automating tasks such as invoice processing and generating basic business insights. The solution provides a natural language interface that allows users to interact with their business data conversationally, reducing manual effort and improving efficiency.
-
-**Note:** This is a proof-of-concept demonstration built for the IBM Dev Day AI Demystified Hackathon. It is not intended for production use.
-
-## MVP Scope
-
-The current MVP implementation includes:
-
-- **React Frontend**: Simple chat interface for user interactions
-- **Invoice Upload**: Document upload functionality with data extraction capabilities
-- **Backend API**: Node.js server handling frontend requests and orchestrating Watson services
-- **Agentic AI Flow**: Workflow orchestration using IBM watsonx Orchestrate
-- **Conversational AI**: IBM Watson Assistant for natural language interactions
-- **Document Storage**: IBM Cloud Object Storage for storing documents and extracted data
-
-## Architecture
-
-The MVP follows a simple, layered architecture:
-
-```
-Frontend (React)
-    ↓
-Backend API (Node.js)
-    ↓
-IBM Watson Services
-    ↓
-Cloud Object Storage
-```
-
-- **Frontend**: React application providing the user interface
-- **Backend API**: Node.js server acting as the middleware layer
-- **Watson Services**: IBM Watson Assistant and watsonx Orchestrate for AI capabilities
-- **Storage**: IBM Cloud Object Storage for persistent data storage
-
-## Tech Stack
-
-- **Frontend**: React (JavaScript)
-- **Backend**: Node.js with Express
-- **AI Services**:
-  - IBM Watson Assistant
-  - IBM watsonx Orchestrate
-- **Storage**: IBM Cloud Object Storage
-
-## Repository Structure
-
-```
-Digibiz/
-├── frontend/          # React frontend application
-│   ├── src/           # Source files
-│   ├── package.json   # Frontend dependencies
-│   └── README.md      # Frontend setup instructions
-│
-├── backend/           # Node.js backend API
-│   ├── server.js      # Express server
-│   ├── package.json   # Backend dependencies
-│   └── README.md      # Backend setup instructions
-│
-└── README.md          # This file
-```
-
-## How to Run
-
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm or yarn
-- IBM Cloud account with Watson services configured
-
-### Frontend
+First, run the development server:
 
 ```bash
-cd frontend
-npm install
-npm start
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-The frontend will be available at `http://localhost:5173`
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Backend
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-```bash
-cd backend
-npm install
-npm start
-```
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-The backend API will be available at `http://localhost:3000`
+## Learn More
 
-**Note:** Ensure that IBM Watson service credentials are properly configured in the backend environment variables before running the application.
+To learn more about Next.js, take a look at the following resources:
 
-## Disclaimer
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-This project is a **proof of concept** developed for demonstration purposes during the IBM Dev Day AI Demystified Hackathon. It is not intended for production use and may contain limitations, incomplete features, or security considerations that would need to be addressed before any real-world deployment.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-**Built for IBM Dev Day AI Demystified Hackathon**
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
