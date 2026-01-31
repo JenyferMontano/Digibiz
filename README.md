@@ -69,12 +69,6 @@ The system includes automatic fallback to mock responses when watsonx Orchestrat
 - **SETUP.md** - Detailed setup and configuration guide
 - **POSTMAN_QUICK_TEST.md** - Postman collection for API testing
 
-## Environment Variables
-
-Create a `.env.local` file with the following variables (see SETUP.md for details):
-- Cloudant credentials (URL, API_KEY, USERNAME, DB_NAME)
-- watsonx Orchestrate credentials (API_KEY, ENDPOINT, HOST_URL)
-- Agent IDs and Environment IDs (NEXT_PUBLIC_*)
 
 ## Disclaimer
 
