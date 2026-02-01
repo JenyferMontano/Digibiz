@@ -1,261 +1,208 @@
-"use client";
+'use client'
 
-import { useEffect, useState } from "react";
-import { useIamToken } from "@/hooks/useGetIAMToken";
+import { useEffect, useState } from 'react'
 
 declare global {
   interface Window {
     WatsonOrchestrateChatWidget?: {
-      init: (options: { orchestrationId: string }) => void;
-    };
+      init: (options: { orchestrationId: string }) => void
+    }
   }
 }
 
+type Mission = {
+  id: number
+  title: string
+  description: string
+  world: 'Organize' | 'Improve' | 'Grow'
+  status: 'locked' | 'active' | 'completed'
+}
+
 export default function Home() {
-  const [dark, setDark] = useState(false);
-  const [files, setFiles] = useState<File[]>([]);
-  const { token, loading, error, refresh } = useIamToken();
-
-  if (loading) return <div>Loading secure session...</div>;
-  if (error) return <div>Auth error: {error}</div>;
-
-  console.log(`Failed to fetch IAM Token ${error}`);
-
-  {
+  const [dark, setDark] = useState(false)
+  const [files, setFiles] = useState<File[]>([])
+  const [missions, setMissions] = useState<Mission[]>([
     {
-      /*
-    useEffect(() => {
-    if (window.WatsonOrchestrateChatWidget) return
+      id: 1,
+      title: 'Map Your Core Process',
+      description: 'Make your main workflow visible',
+      world: 'Organize',
+      status: 'active'
+    },
+    {
+      id: 2,
+      title: 'Define 1 KPI',
+      description: 'Measure what really matters',
+      world: 'Organize',
+      status: 'locked'
+    },
+    {
+      id: 3,
+      title: 'Eliminate 1 Waste',
+      description: 'Remove a clear inefficiency',
+      world: 'Improve',
+      status: 'locked'
+    }
+  ])
+
+  useEffect(() => {
+    if (document.getElementById('watson-embed-script')) return
 
     const script = document.createElement('script')
+    script.id = 'watson-embed-script'
     script.src = 'https://ca-tor.watson-orchestrate.cloud.ibm.com/embed.js'
     script.defer = true
-
     script.onload = () => {
       window.WatsonOrchestrateChatWidget?.init({
         orchestrationId:
-          '8f13fbca78a04fec8de84a69603ef330_f952e5ca-08fe-4f37-9877-acf804db87cd',
+          '8f13fbca78a04fec8de84a69603ef330_f952e5ca-08fe-4f37-9877-acf804db87cd'
       })
     }
-
     document.body.appendChild(script)
+
+    return () => {
+      document.body.removeChild(script)
+    }
   }, [])
 
   function upload(e: React.ChangeEvent<HTMLInputElement>) {
-    if (e.target.files) {
-      setFiles([...files, ...Array.from(e.target.files)])
-    }
+    if (!e.target.files) return
+    setFiles([...files, ...Array.from(e.target.files)])
   }
 
-    
-    */
-    }
-  }
+  const bg = dark ? '#020617' : '#f8fafc'
+  const card = dark ? '#0f172a' : '#ffffff'
+  const border = dark ? '#1e293b' : '#e2e8f0'
+  const muted = dark ? '#94a3b8' : '#64748b'
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: "100vh",
-        fontFamily: "system-ui",
-        backgroundColor: dark ? "#0A0A0A" : "#F8FAFC",
-        color: dark ? "white" : "#1E293B",
-      }}
-    >
-      {/* Chat 60% */}
-      <div
-        style={{
-          width: "60%",
-          padding: "20px",
-          borderRight: dark ? "1px solid #334155" : "1px solid #E2E8F0",
-        }}
-      />
-      {/* Dashboard 40% */}
-      <div style={{ width: "40%", padding: "24px", overflowY: "auto" }}>
-        {/* Toggle */}
+    <div style={{ display: 'flex', height: '100vh', background: bg, color: dark ? 'white' : '#0f172a' }}>
+      {/* Chat */}
+      <div style={{ width: '58%', padding: 20, borderRight: `1px solid ${border}` }}>
         <div
+          id="watson-chat-widget"
           style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: "24px",
+            height: '100%',
+            background: card,
+            borderRadius: 16,
+            boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+            overflow: 'hidden'
           }}
-        >
+        />
+      </div>
+
+      {/* Game Dashboard */}
+      <div style={{ width: '42%', padding: 24, overflowY: 'auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+          <h1 style={{ fontSize: 26, fontWeight: 800 }}>Lean Quest 🚀</h1>
           <button
             onClick={() => setDark(!dark)}
             style={{
-              background: dark ? "#F59E0B" : "#1E293B",
-              color: dark ? "#0F172A" : "white",
-              border: "none",
-              padding: "8px 16px",
-              borderRadius: "8px",
-              fontWeight: "500",
-              cursor: "pointer",
+              background: dark ? '#facc15' : '#020617',
+              color: dark ? '#020617' : 'white',
+              border: 'none',
+              padding: '8px 14px',
+              borderRadius: 10,
+              cursor: 'pointer'
             }}
           >
-            {dark ? "☀ Light" : "🌙 Dark"}
+            {dark ? '☀️' : '🌙'}
           </button>
         </div>
 
-        <h1
-          style={{ fontSize: "24px", fontWeight: "700", marginBottom: "24px" }}
-        >
-          Your Lean Journey
-        </h1>
-
-        {/* Progress */}
-        <div style={{ marginBottom: "32px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "8px",
-            }}
-          >
-            <span style={{ fontWeight: "600", color: "#3B82F6" }}>
-              Organize
-            </span>
-            <span style={{ fontWeight: "600", color: "#10B981" }}>Improve</span>
-            <span style={{ fontWeight: "600", color: "#8B5CF6" }}>Grow</span>
-          </div>
-
-          <div
-            style={{
-              height: "8px",
-              backgroundColor: dark ? "#334155" : "#E2E8F0",
-              borderRadius: "9999px",
-              overflow: "hidden",
-            }}
-          >
+        {/* Worlds */}
+        <div style={{ marginBottom: 32 }}>
+          {['Organize', 'Improve', 'Grow'].map((w, i) => (
             <div
+              key={w}
               style={{
-                height: "100%",
-                width: "40%",
-                backgroundColor: "#3B82F6",
-                borderRadius: "9999px",
+                background: card,
+                border: `1px solid ${border}`,
+                borderRadius: 14,
+                padding: 14,
+                marginBottom: 10
               }}
-            />
-          </div>
+            >
+              <div style={{ fontWeight: 700 }}>{`World ${i + 1}: ${w}`}</div>
+              <div style={{ fontSize: 13, color: muted }}>
+                {w === 'Organize' && 'Create visibility & stability'}
+                {w === 'Improve' && 'Eliminate waste'}
+                {w === 'Grow' && 'Scale with confidence'}
+              </div>
+            </div>
+          ))}
         </div>
 
         {/* Missions */}
-        <div style={{ marginBottom: "32px" }}>
-          <div
-            style={{
-              backgroundColor: dark ? "#1E293B" : "white",
-              border: dark ? "1px solid #334155" : "1px solid #E2E8F0",
-              borderRadius: "12px",
-              padding: "16px",
-              marginBottom: "12px",
-            }}
-          >
+        <div style={{ marginBottom: 32 }}>
+          {missions.map(m => (
             <div
+              key={m.id}
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+                background: card,
+                border: `1px solid ${border}`,
+                borderRadius: 16,
+                padding: 16,
+                marginBottom: 12,
+                opacity: m.status === 'locked' ? 0.45 : 1
               }}
             >
-              <div>
-                <div style={{ fontWeight: "600", fontSize: "16px" }}>
-                  Map Your Core Process
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div>
+                  <div style={{ fontWeight: 700 }}>{m.title}</div>
+                  <div style={{ fontSize: 13, color: muted }}>{m.description}</div>
                 </div>
-                <div style={{ fontSize: "13px", opacity: 0.8 }}>
-                  Identify your 3 main workflow steps
+                <div style={{ fontSize: 12, fontWeight: 600 }}>
+                  {m.status === 'active' && '🟢 Active'}
+                  {m.status === 'locked' && '🔒 Locked'}
+                  {m.status === 'completed' && '🏆 Done'}
                 </div>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: "#DBEAFE",
-                  color: "#1E40AF",
-                  padding: "4px 10px",
-                  borderRadius: "9999px",
-                  fontSize: "12px",
-                  fontWeight: "500",
-                }}
-              >
-                Active
               </div>
             </div>
-          </div>
-
-          <div
-            style={{
-              backgroundColor: dark ? "#1E293B" : "white",
-              border: dark ? "1px solid #334155" : "1px solid #E2E8F0",
-              borderRadius: "12px",
-              padding: "16px",
-            }}
-          >
-            <div style={{ opacity: 0.5 }}>
-              <div style={{ fontWeight: "600", fontSize: "16px" }}>
-                Eliminate 1 Waste
-              </div>
-              <div style={{ fontSize: "13px" }}>
-                Complete previous mission first
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Upload */}
+        {/* Evidence Upload */}
         <div
           style={{
-            border: dark ? "2px dashed #475569" : "2px dashed #94A3B8",
-            borderRadius: "12px",
-            padding: "24px",
-            textAlign: "center",
-            backgroundColor: dark ? "#0F172A" : "#F1F5F9",
+            border: `2px dashed ${border}`,
+            borderRadius: 16,
+            padding: 24,
+            background: dark ? '#020617' : '#f1f5f9'
           }}
         >
-          <div style={{ fontWeight: "600", marginBottom: "8px" }}>
-            Upload Evidence
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>📤 Upload Evidence</div>
+          <div style={{ fontSize: 13, color: muted, marginBottom: 14 }}>
+            Proof required to pass the level
           </div>
-          <div
-            style={{
-              fontSize: "13px",
-              opacity: 0.7,
-              marginBottom: "16px",
-            }}
-          >
-            PDF, images, or screenshots
-          </div>
-
           <label
             style={{
-              display: "inline-block",
-              backgroundColor: "#3B82F6",
-              color: "white",
-              padding: "8px 16px",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "500",
+              display: 'inline-block',
+              background: '#3b82f6',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: 10,
+              cursor: 'pointer'
             }}
           >
-            Choose Files
-            <input
-              type="file"
-              multiple
-              style={{ display: "none" }}
-            />
+            Choose files
+            <input type="file" multiple onChange={upload} style={{ display: 'none' }} />
           </label>
 
           {files.length > 0 && (
-            <div style={{ marginTop: "16px", textAlign: "left" }}>
+            <div style={{ marginTop: 16 }}>
               {files.map((f, i) => (
                 <div
                   key={i}
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "8px",
-                    backgroundColor: dark ? "#1E293B" : "white",
-                    borderRadius: "8px",
-                    marginTop: "8px",
+                    background: card,
+                    borderRadius: 10,
+                    padding: 8,
+                    marginTop: 6,
+                    fontSize: 13
                   }}
                 >
-                  <span style={{ fontSize: "13px" }}>{f.name}</span>
+                  📄 {f.name}
                 </div>
               ))}
             </div>
@@ -263,5 +210,5 @@ export default function Home() {
         </div>
       </div>
     </div>
-  );
+  )
 }
