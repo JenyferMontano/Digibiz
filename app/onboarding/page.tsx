@@ -35,6 +35,7 @@ import { useState } from "react";
 import { companySize } from "@/lib/dropdowns/company-size";
 import { workLimitations } from "@/lib/dropdowns/company-limitations";
 import { companyData } from "@/lib/dropdowns/company-data";
+import { companyPriorities } from "@/lib/dropdowns/company-priorities";
 
 const bussinessStages = [
   {
@@ -299,14 +300,14 @@ export default function Page() {
                           <SelectValue placeholder="Where is your data today?" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="time">Faster delivery</SelectItem>
-                          <SelectItem value="quality">
-                            Better quality
-                          </SelectItem>
-                          <SelectItem value="cost">Lower cost</SelectItem>
-                          <SelectItem value="capacity">
-                            More capacity
-                          </SelectItem>
+                        {companyPriorities.map((item) => (
+                            <SelectItem
+                                key={item.key}
+                                value={item.value}
+                            >
+                                {item.label}
+                            </SelectItem>
+                        ))}
                         </SelectContent>
                       </Select>
                     </Field>
